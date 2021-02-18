@@ -124,7 +124,7 @@ drawSplash = function() {
 drawInstructions = function() {
   strings[0] = "welcome to natalie's moods!";
   strings[1] = "press keys 1-5 to toggle through moods";
-  strings[2] = "press 0 to return to home screen";
+  strings[2] = "press s to return to home screen";
 
   for (let i = 0; i < 4; i++) {
     text(strings[i], width/2, height/2 + i * 30);
