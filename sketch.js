@@ -28,19 +28,27 @@
 // Array of images
 var images = [];
 
+// Array of strings
+var strings = [];
+
 // variable that is a function 
 var drawFunction;
 
 // offset from bottom of screen
 var gTextOffset = 20;
 
-// load all images into an array
+// variable stores font
+var neuehaasgrotesk;
+
+// load all images into an array and loads font
 function preload() {
   images[0] = loadImage('assets/insane.png');
   images[1] = loadImage('assets/calm.png');
   images[2] = loadImage('assets/energized.png');
   images[3] = loadImage('assets/anxiety.png');
   images[4] = loadImage('assets/sleep.png');
+  images[5] = loadImage('assets/splash.png');
+  neuehaasgrotesk = loadFont('assets/NeueHaasGroteskTX.ttf');
 }
 
 // Center drawing, drawFunction will be one for default
@@ -50,15 +58,16 @@ function setup() {
   // Center our drawing objects
   imageMode(CENTER);
   textAlign(CENTER);
-  textSize(24);
+  textSize(20);
+  textFont(neuehaasgrotesk);
 
   // set to one for startup
-  drawFunction = drawOne;
+  drawFunction = drawSplash;
 }
 
 // Very simple, sets the background color and calls your state machine function
 function draw() {
-  background(192);
+  background(255);
 
   // will call your state machine function
   drawFunction();
@@ -106,24 +115,56 @@ drawFive = function() {
    text("i need sleep", width/2, height - gTextOffset);
 }
 
+//-- drawSplash() will draw the image at index 4 from the array
+drawSplash = function() {
+   image(images[5],width/2, height/2);
+}
+
+//-- drawInstructions() will write instructions at index
+drawInstructions = function() {
+  strings[0] = "welcome to natalie's moods!";
+  strings[1] = "press keys 1-5 to toggle through moods";
+  strings[2] = "press 0 to return to home screen";
+
+  for (let i = 0; i < 4; i++) {
+    text(strings[i], width/2, height/2 + i * 30);
+    textAlign(CENTER, CENTER);
+  }
+}
+
 
 //========= TEMPLATE: add or change interface functions, as you like =========
 
 // Change the drawFunction variable based on your interaction
 function keyTyped() {
+  if( drawFunction === drawSplash ) {
+    return;
+  }
+
   if( key === '1' ) {
-  	drawFunction = drawOne;
+    drawFunction = drawOne;
   }
   else if( key === '2' ) {
-  	drawFunction = drawTwo;
+    drawFunction = drawTwo;
   }
   else if( key === '3' ) {
-  	drawFunction = drawThree;
+    drawFunction = drawThree;
   }
   else if( key === '4' ) {
-  	drawFunction = drawFour;
+    drawFunction = drawFour;
   }
   else if( key === '5' ) {
-  	drawFunction = drawFive;
+    drawFunction = drawFive;
+  }
+
+  else if( key === 's' ) {
+    drawFunction = drawSplash;
+  }
+}
+
+function mousePressed() {
+  // only change state if we are in splash screen
+  if( drawFunction === drawSplash ) {
+    drawFunction = drawInstructions;
   }
 }
